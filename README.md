@@ -1,2 +1,5 @@
-# ansara-fpl
-ANSARA FPL Live Ranking Dashboard
+# ANSARA FPL
+
+Public ranking dashboard. This repository contains generated public website files only.
+
+**Developed by @mrsyafiqzamri**

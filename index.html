@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="ANSARA FPL live ranking dashboard">
+  <title>ANSARA FPL</title>
+  <link rel="icon" href="assets/ansara-fpl-logo.134d22f3bb.png">
+  <link rel="apple-touch-icon" href="assets/ansara-fpl-logo.134d22f3bb.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/styles.abafae6c8a.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#/home" aria-label="ANSARA FPL home">
+        <img src="assets/ansara-fpl-logo.134d22f3bb.png" alt="ANSARA FPL" class="brand-logo">
+        <div><strong>ANSARA FPL</strong><span id="seasonLabel">2026/27</span></div>
+      </a>
+      <div class="top-actions">
+        <span class="status-pill" id="statusPill"><i></i><span>Loading</span></span>
+        <button class="icon-btn" id="refreshBtn" type="button" aria-label="Refresh">↻</button>
+      </div>
+    </header>
+
+    <section class="controlbar">
+      <button class="search-trigger" id="searchTrigger" type="button">⌕ <span>Search manager, team or chapter</span></button>
+      <label class="gw-control">GW <select id="gwSelect" aria-label="Gameweek"></select></label>
+    </section>
+
+    <main id="app" aria-live="polite">
+      <div class="loading"><div class="spinner"></div><p>Loading ANSARA FPL…</p></div>
+    </main>
+
+    <footer class="footer">
+      <strong>ANSARA FPL</strong>
+      <span id="updatedLabel"></span>
+      <span>Developed by @mrsyafiqzamri</span>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#/home" data-nav="home"><span>⌂</span><small>Home</small></a>
+      <a href="#/individual" data-nav="individual"><span>≡</span><small>Rank</small></a>
+      <a href="#/groups" data-nav="groups"><span>◈</span><small>Group</small></a>
+      <a href="#/chapters" data-nav="chapters"><span>⌗</span><small>Chapter</small></a>
+      <a href="#/more" data-nav="more"><span>•••</span><small>More</small></a>
+    </nav>
+  </div>
+
+  <dialog id="searchDialog" class="search-dialog">
+    <form method="dialog" class="search-head">
+      <input id="searchInput" autocomplete="off" placeholder="Search manager, team, name or chapter">
+      <button aria-label="Close">×</button>
+    </form>
+    <div id="searchResults" class="search-results"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="assets/app.2359d74ca7.js"></script>
+</body>
+</html>
