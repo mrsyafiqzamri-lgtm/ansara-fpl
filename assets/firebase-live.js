@@ -189,7 +189,7 @@ function attachTodayVisitors(uid) {
   stopTodayListener = onValue(
     todayRef,
     (snapshot) => {
-      visitorsEl.textContent = String(snapshot.numChildren());
+      visitorsEl.textContent = String(snapshot.size);
     },
     (error) => {
       console.error("Visitors listener failed:", error);
