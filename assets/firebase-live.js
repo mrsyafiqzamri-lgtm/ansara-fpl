@@ -114,7 +114,24 @@ async function renderAfcl(route=afclRoute(),scroll=true){if(!route)return;const 
 async function enhanceMainRoutes(){ensureAfclNav();const r=(location.hash||"").replace(/^#\/?/,"").split("/").filter(Boolean),route=r[0]||"home",appEl=document.getElementById("app");if(!appEl)return;if(route==="manager"){await loadAfcl().catch(()=>null);const m=A.seedMap.get(String(decodeURIComponent(r[1]||"")));if(!m||document.getElementById("afclManagerCard"))return;const gl=drawComplete()?A.draw?.byId?.get(String(m.id)):null,g=gl?A.draw.groups.find(x=>x.label===gl):null,rec=g?groupStandings(g).find(x=>String(x.id)===String(m.id)):null;const s=document.createElement("section");s.id="afclManagerCard";s.className="section";s.innerHTML=`<div class="section-head"><div><h2>ANSARA Fantasy Champions League</h2><span class="subline">Official GW2 qualification & seeding</span></div></div><div class="profile-kpis" style="padding:0 14px 14px"><div><span>AFCL Status</span><strong style="font-size:14px;color:${m.qualified?"#15803d":"#b91c1c"}">${m.qualified?"Qualified":"Did Not Qualify"}</strong></div><div><span>GW2 Seed</span><strong>#${m.seed}</strong></div><div><span>Pot / Group</span><strong>${m.pot?`P${m.pot}`:"—"}${gl?` • ${gl}`:""}</strong></div><div><span>AFCL Pts</span><strong>${rec?.pts??"—"}</strong></div></div>`;appEl.appendChild(s)}if(route==="more"&&!document.getElementById("afclRulesMoreCard")){const grid=appEl.querySelector(".more-grid");if(grid){const a=document.createElement("a");a.id="afclRulesMoreCard";a.href=ah("rules");a.className="more-card";a.innerHTML="<span>📘</span>Rules & FAQ";grid.appendChild(a)}}}
 let afclRouteTimer=null;
 function routeSync(){const r=afclRoute(),appEl=document.getElementById("app");if(r){if(!appEl)return;const root=appEl.querySelector("[data-afcl-root]");const target=r[0]||"overview";if(root&&root.dataset.afclPage===target){ensureAfclNav();return}renderAfcl(r)}else enhanceMainRoutes()}
-const observer=new MutationObserver(()=>{if(A.rendering)return;const r=afclRoute(),appEl=document.getElementById("app");if(!appEl)return;clearTimeout(afclRouteTimer);if(r){if(!appEl.querySelector("[data-afcl-root]"))afclRouteTimer=setTimeout(()=>renderAfcl(r),0)}else afclRouteTimer=setTimeout(enhanceMainRoutes,0)});const appEl=document.getElementById("app");if(appEl)observer.observe(appEl,{childList:true});window.addEventListener("hashchange",()=>{clearTimeout(afclRouteTimer);afclRouteTimer=setTimeout(routeSync,0)});ensureAfclNav();routeSync();
+const observer=new MutationObserver(()=>{if(A.rendering)return;const r=afclRoute(),appEl=document.getElementById("app");if(!appEl)return;clearTimeout(afclRouteTimer);if(r){if(!appEl.querySelector("[data-afcl-root]"))afclRouteTimer=setTimeout(()=>renderAfcl(r),0)}else afclRouteTimer=setTimeout(enhanceMainRoutes,0)});const appEl=document.getElementById("app");if(appEl)observer.observe(appEl,{childList:true});window.addEventListener("hashchange",()=>{clearTimeout(afclRouteTimer);afclRouteTimer=setTimeout(routeSync,0)});
+
+/* Hard-safe exit from AFCL. The core dashboard and AFCL are two routers sharing
+   one hash space. When leaving AFCL, perform one clean reload into the selected
+   core route so stale AFCL rendering can never capture the navigation state. */
+document.addEventListener("click",e=>{
+  if(!afclRoute())return;
+  const link=e.target.closest?.(".bottom-nav a");
+  if(!link||link.matches("[data-afcl-main]"))return;
+  const href=link.getAttribute("href")||"";
+  if(!href.startsWith("#/"))return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  history.replaceState(null,"",`${location.pathname}${location.search}${href}`);
+  location.reload();
+},true);
+
+ensureAfclNav();routeSync();
 
 onValue(afclLiveRef,s=>{A.live={status:"pending",index:0,speed:1,...(s.val()||{})};A.drawIndex=Number(A.live.index||0);A.drawSpeed=Number(A.live.speed||1);A.liveReady=true;if(afclRoute())renderAfcl(afclRoute(),false);else enhanceMainRoutes()},e=>{A.liveReady=true;console.warn("AFCL live sync",e)});
 onAuthStateChanged(auth,user=>{if(user)startRealtimeAudience(user)});
