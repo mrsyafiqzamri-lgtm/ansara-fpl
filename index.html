@@ -340,7 +340,22 @@
       window.addEventListener("focus", checkDashboardUpdate);
     })();
   </script>
-  <script type="module" src="assets/firebase-live.js?v=2"></script>
+  <script type="module">
+(async () => {
+  try {
+    const response = await fetch(`data/manifest.json?v=${Date.now()}`, {
+      cache: "no-store"
+    });
 
+    const manifest = await response.json();
+    const buildId = manifest.build_id || Date.now();
+
+    await import(`./assets/firebase-live.js?v=${encodeURIComponent(buildId)}`);
+  } catch (error) {
+    console.error("ANSARA FPL UI module load failed:", error);
+    await import(`./assets/firebase-live.js?v=${Date.now()}`);
+  }
+})();
+</script>
 </body>
 </html>
