@@ -152,6 +152,22 @@ function loadHomeSnapshot(){if(homeSnapshotPromise)return homeSnapshotPromise;ho
 function homeLeaderFromSnapshot(data,gw){const rows=(data.individual||[]).map(base=>{const hs=(data.histories?.[base.id]||[]).map(Number),score=Number(hs[gw-1]||0),total=hs.slice(0,gw).reduce((a,b)=>a+b,0);return{...base,score,total}}).sort((a,b)=>b.total-a.total||String(a.team_name||"").localeCompare(String(b.team_name||"")));return [...rows].sort((a,b)=>b.score-a.score)[0]||null}
 function homeEsc(v){return String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\'":"&#39;","\"":"&quot;"}[c]))}
 function homeKpi(card,label,value,primary,secondary=""){if(!card)return;card.classList.add("home-summary-kpi");card.innerHTML=`<span>${homeEsc(label)}</span><strong>${homeEsc(value)}</strong>${primary?`<b>${homeEsc(primary)}</b>`:""}${secondary?`<small>${homeEsc(secondary)}</small>`:""}`}
+function homeCompactOverallTable(section){
+  if(!section)return;
+  const table=section.querySelector("table");if(!table)return;
+  table.classList.add("compact");
+}
+function homeGwMetrics(data,gw){
+  const rows=(data.individual||[]).map(base=>{
+    const hs=(data.histories?.[base.id]||[]).map(Number);
+    return {...base,score:Number(hs[gw-1]||0),total:hs.slice(0,gw).reduce((a,b)=>a+b,0)}
+  });
+  const scores=rows.map(r=>r.score);
+  const average=scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:0;
+  const below=scores.filter(x=>x<average).length;
+  const leader=[...rows].sort((a,b)=>b.score-a.score||b.total-a.total||String(a.team_name||"").localeCompare(String(b.team_name||"")))[0]||null;
+  return {leader,average,below,count:scores.length}
+}
 async function enhanceHomeVisuals(root){
   const gw=Number(document.getElementById("gwSelect")?.value||0);
   const hero=root.querySelector(":scope > .hero");if(hero&&!hero.classList.contains("afcl-product-hero")){hero.classList.add("home-product-hero");const h1=hero.querySelector("h1"),eyebrow=hero.querySelector(".eyebrow"),p=hero.querySelector("p");if(h1)h1.textContent=gw?`GW${gw} Overview`:"Competition Overview";if(eyebrow)eyebrow.textContent=gw?`GAMEWEEK ${gw}`:"CURRENT GAMEWEEK";if(p)p.textContent="Leaders and Group Competition at a glance.";hero.querySelector(".hero-meta")?.remove()}
@@ -159,14 +175,50 @@ async function enhanceHomeVisuals(root){
   const overall=sections.find(x=>x.querySelector(".section-head h2")?.textContent.trim()==="Overall Top 10"||x.querySelector(".section-head h2")?.textContent.trim()==="Overall Top 5");
   const group=sections.find(x=>x.querySelector(".section-head h2")?.textContent.trim()==="Group Top 5");
   const mover=sections.find(x=>x.querySelector(".section-head h2")?.textContent.trim()==="Biggest Climbers");if(mover)mover.remove();
-  if(overall){const h=overall.querySelector(".section-head h2");if(h)h.textContent="Overall Top 5";[...overall.querySelectorAll("tbody tr")].slice(5).forEach(x=>x.remove())}
+  if(overall){
+    const h=overall.querySelector(".section-head h2");if(h)h.textContent="Overall Top 5";
+    [...overall.querySelectorAll("tbody tr")].slice(5).forEach(x=>x.remove())
+  }
   const cards=[...root.querySelectorAll(":scope > .kpis > .kpi")];
-  const firstOverall=overall?.querySelector("tbody tr");const team=firstOverall?.querySelector(".team-link")?.textContent.trim()||cards[0]?.querySelector("small")?.textContent.trim()||"—";const manager=firstOverall?.querySelector(".subline")?.textContent.trim()||"";const chapter=firstOverall?.querySelector(".chapter-link")?.textContent.trim()||"";const scores=firstOverall?[...firstOverall.querySelectorAll("td.score")].map(x=>x.textContent.trim()):[];const overallTotal=scores.at(-1)||cards[0]?.querySelector("strong")?.textContent.trim()||"—";
-  homeKpi(cards[0],"Overall Leader",overallTotal,team,[manager,chapter].filter(Boolean).join(" • "));
-  const groupFirst=group?.querySelector("tbody tr"),groupChapter=groupFirst?.querySelector(".chapter-link")?.textContent.trim()||cards[2]?.querySelector("small")?.textContent.trim()||"—",groupScores=groupFirst?[...groupFirst.querySelectorAll("td.score")].map(x=>x.textContent.trim()):[],groupTotal=groupScores.at(-1)||cards[2]?.querySelector("strong")?.textContent.trim()||"—";
-  homeKpi(cards[2],"Leading Group",groupTotal,groupChapter);
-  const avgVal=cards[3]?.querySelector("strong")?.textContent.trim()||"—",medianVal=cards[3]?.querySelector("small")?.textContent.trim()||"";homeKpi(cards[3],gw?`Average Gameweek ${gw}`:"Average Gameweek",avgVal,"",medianVal);
-  try{const data=await loadHomeSnapshot(),leader=homeLeaderFromSnapshot(data,gw||Number(data.meta?.gw||1));if(leader&&document.body.dataset.route==="home"){homeKpi(cards[1],gw?`Gameweek ${gw} Leader`:"Gameweek Leader",String(leader.score),leader.team_name,[leader.manager_name,leader.chapter].filter(Boolean).join(" • "))}}catch(e){const old=cards[1];if(old){const score=old.querySelector("strong")?.textContent.trim()||"—",name=old.querySelector("small")?.textContent.trim()||"—";homeKpi(old,gw?`Gameweek ${gw} Leader`:"Gameweek Leader",score,name)}}
+  const firstOverall=overall?.querySelector("tbody tr");
+  const team=firstOverall?.querySelector(".team-link")?.textContent.trim()||cards[0]?.querySelector("small")?.textContent.trim()||"—";
+  const manager=firstOverall?.querySelector(".subline")?.textContent.trim()||"";
+  const chapter=firstOverall?.querySelector(".chapter-link")?.textContent.trim()||"";
+  const scores=firstOverall?[...firstOverall.querySelectorAll("td.score")].map(x=>x.textContent.trim()):[];
+  const overallTotal=scores.at(-1)||cards[0]?.querySelector("strong")?.textContent.trim()||"—";
+  homeKpi(cards[0],"Overall Leader",`${overallTotal} Total Points`,team,[manager,chapter].filter(Boolean).join(" • "));
+  homeCompactOverallTable(overall);
+
+  const groupFirst=group?.querySelector("tbody tr");
+  const groupChapter=groupFirst?.querySelector(".chapter-link")?.textContent.trim()||cards[2]?.querySelector("small")?.textContent.trim()||"—";
+  const groupScores=groupFirst?[...groupFirst.querySelectorAll("td.score")].map(x=>x.textContent.trim()):[];
+  const groupTotal=groupScores.at(-1)||cards[2]?.querySelector("strong")?.textContent.trim()||"—";
+  homeKpi(cards[2],"Leading Group",`${groupTotal} Total Points`,groupChapter);
+
+  try{
+    const data=await loadHomeSnapshot();
+    const activeGw=gw||Number(data.meta?.gw||1);
+    const metrics=homeGwMetrics(data,activeGw);
+    if(document.body.dataset.route==="home"){
+      if(metrics.leader)homeKpi(cards[1],`Gameweek ${activeGw} Leader`,`${metrics.leader.score} Gameweek Points`,metrics.leader.team_name,[metrics.leader.manager_name,metrics.leader.chapter].filter(Boolean).join(" • "));
+      const rounded=Math.round(metrics.average*10)/10;
+      const avgText=Number.isInteger(rounded)?String(rounded):rounded.toFixed(1);
+      const belowText=`${metrics.below.toLocaleString("en-MY")} ${metrics.below===1?"manager":"managers"} below average`;
+      homeKpi(cards[3],`Average Gameweek ${activeGw}`,`${avgText} Points`,"",belowText)
+    }
+  }catch(e){
+    const oldLeader=cards[1];
+    if(oldLeader){
+      const score=oldLeader.querySelector("strong")?.textContent.trim()||"—";
+      const name=oldLeader.querySelector("small")?.textContent.trim()||"—";
+      homeKpi(oldLeader,gw?`Gameweek ${gw} Leader`:"Gameweek Leader",`${score} Gameweek Points`,name)
+    }
+    const oldAvg=cards[3];
+    if(oldAvg){
+      const score=oldAvg.querySelector("strong")?.textContent.trim()||"—";
+      homeKpi(oldAvg,gw?`Average Gameweek ${gw}`:"Average Gameweek",`${score} Points`)
+    }
+  }
   markKpis(root)
 }
 function moreCardIcon(card,key){const span=card.querySelector("span");if(span){span.innerHTML=productIcon(key);span.setAttribute("aria-hidden","true")}}
