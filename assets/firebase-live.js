@@ -129,6 +129,47 @@ button,a,input,select,summary{outline:none}button:focus-visible,a:focus-visible,
 .gw-control{padding-left:10px;padding-right:10px}.gw-control select{min-width:58px}.home-product-hero .hero-meta{display:none}.home-product-hero{margin-bottom:14px}.home-product-hero p{max-width:480px}
 .home-summary-kpi{min-height:124px;display:flex;flex-direction:column;justify-content:flex-start;padding:14px 15px}.home-kpi-label{display:block;color:var(--muted);font-size:10.5px;font-weight:850;letter-spacing:.65px;line-height:1.2;text-transform:uppercase}.home-kpi-score{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:8px}.home-kpi-score strong{font-size:36px;line-height:.95;letter-spacing:-1px}.home-kpi-score em{font-style:normal;color:var(--text-soft);font-size:11px;font-weight:800;line-height:1.15}.home-kpi-identity{display:flex;flex-direction:column;gap:1px;margin-top:10px;min-width:0}.home-kpi-identity b{font-size:13px;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.home-kpi-identity small{display:block;margin:0;color:var(--muted);font-size:10.5px;line-height:1.28;white-space:normal;overflow:visible;text-overflow:clip}.home-kpi-note{display:block;margin-top:10px;color:var(--muted);font-size:11px;line-height:1.3}.home-summary-kpi.is-primary .home-kpi-score strong{font-size:39px}.home-summary-kpi.is-primary{border-color:#d9dde4}
 @media(max-width:560px){.home-summary-kpi{min-height:122px;padding:13px}.home-kpi-score{gap:6px;margin-top:7px}.home-kpi-score strong{font-size:34px}.home-summary-kpi.is-primary .home-kpi-score strong{font-size:36px}.home-kpi-score em{font-size:10px}.home-kpi-identity{margin-top:9px}.home-kpi-identity b{font-size:12.5px}.home-kpi-identity small,.home-kpi-note{font-size:10.5px}}
+
+/* Rank page: compact table + aligned controls */
+.controlbar{grid-template-columns:minmax(0,1fr) 118px}
+.controlbar .search-trigger,.controlbar .gw-control{height:48px;min-height:48px;box-sizing:border-box;border:1px solid #d7dbe2;border-radius:12px;background:#fff;box-shadow:none}
+.controlbar .search-trigger{padding:0 14px}
+.controlbar .gw-control{width:118px;padding:0 9px;justify-content:center}
+.controlbar .gw-control select{width:100%;height:46px;min-height:0;padding:0;border:0;text-align:center;text-align-last:center;background:transparent}
+.filters.rank-filters{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;width:min(100%,720px);overflow:visible;align-items:stretch}
+.filters.rank-filters .segmented,.filters.rank-filters .filter-select{width:100%;height:48px;min-height:48px;box-sizing:border-box;border:1px solid #d7dbe2;border-radius:12px;background:#fff}
+.filters.rank-filters .segmented{display:flex;padding:4px}
+.filters.rank-filters .segmented button{flex:1;height:38px;min-height:38px;padding:0 10px;border-radius:9px}
+.filters.rank-filters .filter-select{padding:0 12px;font-size:13px}
+body[data-route="individual"] .individual-compact-section{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+body[data-route="individual"] .individual-compact-section .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:719px){
+  .controlbar{grid-template-columns:minmax(0,1fr) 112px}.controlbar .search-trigger,.controlbar .gw-control{height:46px;min-height:46px;border-radius:12px}.controlbar .gw-control{width:112px;padding:0 8px}.controlbar .gw-control select{height:44px}
+  .filters.rank-filters{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;width:100%;padding-bottom:12px}.filters.rank-filters .segmented,.filters.rank-filters .filter-select{height:48px;min-height:48px}.filters.rank-filters .segmented button{height:38px;min-height:38px;font-size:12.5px}.filters.rank-filters .filter-select{font-size:12.5px}
+  body[data-route="individual"] .section.individual-compact-section{background:#fff!important;border:1px solid var(--line)!important;overflow:hidden!important;border-radius:14px!important}
+  body[data-route="individual"] .individual-compact-section .table-wrap{overflow:visible!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"]{display:table!important;width:100%!important;min-width:0!important;table-layout:fixed!important;border-collapse:collapse!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] thead{display:table-header-group!important;position:static!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] tbody{display:table-row-group!important;padding:0!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] tr{display:table-row!important;background:transparent!important;border:0!important;border-radius:0!important;padding:0!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] th{display:table-cell!important;padding:9px 5px!important;font-size:8px!important;line-height:1.15!important;letter-spacing:.45px!important;white-space:normal!important;vertical-align:middle!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td{display:table-cell!important;padding:10px 5px!important;border:0!important;border-bottom:1px solid #eef0f2!important;vertical-align:middle!important;min-width:0!important;background:transparent!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] tbody tr:last-child td{border-bottom:0!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] th:nth-child(1),body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td:nth-child(1){width:30px!important;text-align:left!important;font-size:12px!important;color:inherit!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td:nth-child(1).top{color:var(--red)!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] th:nth-child(2),body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td:nth-child(2){width:32%!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] th:nth-child(3),body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td:nth-child(3){width:25%!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] th:nth-child(4),body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td:nth-child(4){width:44px!important;text-align:center!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] th:nth-child(5),body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td:nth-child(5){width:39px!important;text-align:right!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] th:nth-child(6),body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td:nth-child(6){width:47px!important;text-align:right!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] .team-link{font-size:11.5px!important;line-height:1.2!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] .subline{font-size:9px!important;line-height:1.2!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] .chapter-link{font-size:10.5px!important;line-height:1.2!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] .movement{font-size:10px!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] .score{font-size:12px!important;font-weight:900!important}
+  body[data-route="individual"] .rank-table[data-table-kind="individual-compact"] td:before{content:none!important}
+}
+
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
   `;document.head.appendChild(st);upgradePrimaryNav();upgradeChromeControls()
 }
@@ -147,6 +188,21 @@ function upgradeChromeControls(){
   document.getElementById("searchInput")?.setAttribute("aria-label","Search manager, team or chapter")
 }
 function classifyTables(root=document){root.querySelectorAll("table").forEach(t=>{t.querySelectorAll("th").forEach(th=>th.setAttribute("scope","col"));const h=[...t.querySelectorAll("thead th")].map(x=>x.textContent.trim().toLowerCase());if(t.classList.contains("afcl-table"))return;if(h.includes("chapter #"))t.dataset.tableKind="individual";else if(h.includes("team / manager")&&h.includes("move"))t.dataset.tableKind="ranking";else if(h[1]==="chapter"&&h.includes("move"))t.dataset.tableKind="group-summary"})}
+
+function enhanceIndividualRanking(root){
+  const filters=root.querySelector(".filters");if(filters)filters.classList.add("rank-filters");
+  const table=root.querySelector(".rank-table");if(!table)return;
+  if(!table.dataset.rankCompact){
+    const headRow=table.querySelector("thead tr");if(headRow?.children?.[3])headRow.children[3].remove();
+    table.querySelectorAll("tbody tr").forEach(tr=>{if(tr.children?.[3])tr.children[3].remove()});
+    table.dataset.rankCompact="1";
+  }
+  table.dataset.tableKind="individual-compact";
+  table.classList.add("compact");
+  table.setAttribute("aria-label","Individual Ranking");
+  table.closest(".section")?.classList.add("individual-compact-section");
+}
+
 function markKpis(root){root.querySelectorAll(".kpi").forEach(k=>{const label=k.querySelector("span")?.textContent.trim().toLowerCase()||"",primary=label==="overall leader"||label==="gw leader"||label==="highest gw"||(label.includes("gameweek")&&label.includes("leader"));k.classList.toggle("is-primary",primary);k.classList.toggle("is-secondary",!primary)})}
 let homeSnapshotPromise=null;
 function loadHomeSnapshot(){if(homeSnapshotPromise)return homeSnapshotPromise;homeSnapshotPromise=(async()=>{const manifest=await json("data/manifest.json");return json(manifest.snapshot)})().catch(e=>{homeSnapshotPromise=null;throw e});return homeSnapshotPromise}
@@ -230,7 +286,7 @@ function chapterHubTabs(active){return `<nav class="chapter-hub-tabs" aria-label
 function enhanceChapterHub(root,route){if(!["groups","chapters"].includes(route)||root.querySelector(".chapter-hub-tabs"))return;const head=root.querySelector(".page-head");if(!head)return;head.insertAdjacentHTML("afterend",chapterHubTabs(route))}
 function enhanceChapterContext(root,route){if(!["group","chapter"].includes(route)||root.querySelector(".chapter-context-tabs"))return;const raw=(location.hash||"").replace(/^#\/?/,"").split("/")[1]||"";let chapter=raw;try{chapter=decodeURIComponent(raw)}catch{}const encChapter=encodeURIComponent(chapter);const head=root.querySelector(".page-head");if(!head)return;const wrap=document.createElement("div");wrap.className="chapter-context-wrap";wrap.innerHTML=`<span class="chapter-context-label">Chapter hub</span><nav class="chapter-context-tabs" aria-label="${chapter.replace(/"/g,"&quot;")} chapter sections"><a href="#/chapter/${encChapter}" class="${route==="chapter"?"active":""}">Overview</a><a href="#/group/${encChapter}" class="${route==="group"?"active":""}">Group Competition</a></nav>`;head.insertAdjacentElement("afterend",wrap)}
 function applyProductRoute(parts){
-  ensureProductUI();const route=Array.isArray(parts)?(parts[0]||"home"):String(parts||"home");document.body.dataset.route=route;document.body.dataset.competition=route==="afcl"?"afcl":"ansara";upgradePrimaryNav();upgradeChromeControls();syncPrimaryNavState(route);const appEl=document.getElementById("app");if(!appEl)return;appEl.classList.remove("statistics-product-page","hall-product-page","manager-product-page");classifyTables(appEl);markKpis(appEl);if(route==="home")enhanceHomeVisuals(appEl);if(route==="groups")appEl.querySelectorAll(".group-card").forEach(c=>{const n=Number((c.querySelector(".big-rank")?.textContent||"").replace(/\D/g,""));if(n&&n<=3)c.classList.add("top-group-card")});enhanceChapterHub(appEl,route);enhanceChapterContext(appEl,route);if(route==="more")enhanceMoreVisuals(appEl);if(route==="statistics")appEl.classList.add("statistics-product-page");if(route==="hall")appEl.classList.add("hall-product-page");if(route==="manager")appEl.classList.add("manager-product-page");syncPrimaryNavState(route);
+  ensureProductUI();const route=Array.isArray(parts)?(parts[0]||"home"):String(parts||"home");document.body.dataset.route=route;document.body.dataset.competition=route==="afcl"?"afcl":"ansara";upgradePrimaryNav();upgradeChromeControls();syncPrimaryNavState(route);const appEl=document.getElementById("app");if(!appEl)return;appEl.classList.remove("statistics-product-page","hall-product-page","manager-product-page");classifyTables(appEl);if(route==="individual")enhanceIndividualRanking(appEl);markKpis(appEl);if(route==="home")enhanceHomeVisuals(appEl);if(route==="groups")appEl.querySelectorAll(".group-card").forEach(c=>{const n=Number((c.querySelector(".big-rank")?.textContent||"").replace(/\D/g,""));if(n&&n<=3)c.classList.add("top-group-card")});enhanceChapterHub(appEl,route);enhanceChapterContext(appEl,route);if(route==="more")enhanceMoreVisuals(appEl);if(route==="statistics")appEl.classList.add("statistics-product-page");if(route==="hall")appEl.classList.add("hall-product-page");if(route==="manager")appEl.classList.add("manager-product-page");syncPrimaryNavState(route);
 }
 
 function ensureAfclStyle(){if(document.getElementById("afclIntegratedStyle")){ensureProductUI();return}const st=document.createElement("style");st.id="afclIntegratedStyle";st.textContent=`
