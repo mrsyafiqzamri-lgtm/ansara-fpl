@@ -2,345 +2,146 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#111827">
-
-  <meta
-    name="description"
-    content="Official live ranking dashboard for ANSARA Fantasy Premier League 2026/27."
-  >
-
+  <meta name="description" content="Official live ranking dashboard for ANSARA Fantasy Premier League 2026/27.">
   <title>ANSARA FPL</title>
-
-  <!-- Canonical -->
-  <link
-    rel="canonical"
-    href="https://mrsyafiqzamri-lgtm.github.io/ansara-fpl/"
-  >
-
-  <!-- Open Graph / WhatsApp / Facebook / Threads -->
+  <link rel="canonical" href="https://mrsyafiqzamri-lgtm.github.io/ansara-fpl/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ANSARA FPL">
   <meta property="og:title" content="ANSARA FPL">
-
-  <meta
-    property="og:description"
-    content="Official live ranking dashboard for ANSARA Fantasy Premier League 2026/27."
-  >
-
-  <meta
-    property="og:url"
-    content="https://mrsyafiqzamri-lgtm.github.io/ansara-fpl/"
-  >
-
-  <meta
-    property="og:image"
-    content="https://mrsyafiqzamri-lgtm.github.io/ansara-fpl/assets/social-preview.png"
-  >
-
-  <meta
-    property="og:image:alt"
-    content="ANSARA FPL"
-  >
-
-  <!-- X / Twitter -->
-  <meta
-    name="twitter:card"
-    content="summary"
-  >
-
-  <meta
-    name="twitter:title"
-    content="ANSARA FPL"
-  >
-
-  <meta
-    name="twitter:description"
-    content="Official live ranking dashboard for ANSARA Fantasy Premier League 2026/27."
-  >
-
-  <meta
-    name="twitter:image"
-    content="https://mrsyafiqzamri-lgtm.github.io/ansara-fpl/assets/social-preview.png"
-  >
-
-  <!-- App icons -->
+  <meta property="og:description" content="Official live ranking dashboard for ANSARA Fantasy Premier League 2026/27.">
+  <meta property="og:url" content="https://mrsyafiqzamri-lgtm.github.io/ansara-fpl/">
+  <meta property="og:image" content="https://mrsyafiqzamri-lgtm.github.io/ansara-fpl/assets/social-preview.png">
+  <meta property="og:image:alt" content="ANSARA FPL">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ANSARA FPL">
+  <meta name="twitter:description" content="Official live ranking dashboard for ANSARA Fantasy Premier League 2026/27.">
+  <meta name="twitter:image" content="https://mrsyafiqzamri-lgtm.github.io/ansara-fpl/assets/social-preview.png">
   <link rel="icon" href="assets/ansara-fpl-logo.134d22f3bb.png">
   <link rel="apple-touch-icon" href="assets/ansara-fpl-logo.134d22f3bb.png">
-
-  <!-- PWA -->
   <link rel="manifest" href="manifest.webmanifest">
-
-  <!-- Styles -->
   <link rel="stylesheet" href="assets/styles.abafae6c8a.css">
+  <style>
+    @media(max-width:719px){.bottom-nav{grid-template-columns:repeat(6,1fr)}.bottom-nav a small{font-size:8px}.bottom-nav a span{font-size:15px}}
+  </style>
 </head>
-
 <body>
-
   <div class="app-shell">
-
     <header class="topbar">
-
-      <a
-        class="brand"
-        href="#/home"
-        aria-label="ANSARA FPL home"
-      >
-
-        <img
-          src="assets/ansara-fpl-logo.134d22f3bb.png"
-          alt="ANSARA FPL"
-          class="brand-logo"
-        >
-
-        <div>
-          <strong>ANSARA FPL</strong>
-          <span id="seasonLabel">2026/27</span>
-        </div>
-
+      <a class="brand" href="#/home" aria-label="ANSARA FPL home">
+        <img src="assets/ansara-fpl-logo.134d22f3bb.png" alt="ANSARA FPL" class="brand-logo">
+        <div><strong>ANSARA FPL</strong><span id="seasonLabel">2026/27</span></div>
       </a>
-
       <div class="top-actions">
-
-        <span
-          class="status-pill"
-          id="statusPill"
-        >
-          <i></i>
-          <span>Loading</span>
-        </span>
-
-        <button
-          class="icon-btn"
-          id="refreshBtn"
-          type="button"
-          aria-label="Refresh"
-        >
-          ↻
-        </button>
-
+        <span class="status-pill" id="statusPill"><i></i><span>Loading</span></span>
+        <button class="icon-btn" id="refreshBtn" type="button" aria-label="Refresh">↻</button>
       </div>
-
     </header>
 
-
     <section class="controlbar">
-
-      <button
-        class="search-trigger"
-        id="searchTrigger"
-        type="button"
-      >
-        ⌕
-        <span>
-          Search manager, team or chapter
-        </span>
-      </button>
-
-      <label class="gw-control">
-        GW
-        <select
-          id="gwSelect"
-          aria-label="Gameweek"
-        ></select>
-      </label>
-
+      <button class="search-trigger" id="searchTrigger" type="button">⌕ <span>Search manager, team or chapter</span></button>
+      <label class="gw-control">GW <select id="gwSelect" aria-label="Gameweek"></select></label>
     </section>
 
-
-    <main
-      id="app"
-      aria-live="polite"
-    >
-
-      <div class="loading">
-
-        <div class="spinner"></div>
-
-        <p>
-          Loading ANSARA FPL…
-        </p>
-
-      </div>
-
+    <main id="app" aria-live="polite">
+      <div class="loading"><div class="spinner"></div><p>Loading ANSARA FPL…</p></div>
     </main>
 
-
     <footer class="footer">
-
-      <strong>
-        ANSARA FPL
-      </strong>
-
+      <strong>ANSARA FPL</strong>
       <span id="updatedLabel"></span>
-
-      <span>
-        Developed by @mrsyafiqzamri
-      </span>
-
+      <span>Developed by @mrsyafiqzamri</span>
     </footer>
 
-
-    <nav
-      class="bottom-nav"
-      aria-label="Primary navigation"
-    >
-
-      <a
-        href="#/home"
-        data-nav="home"
-      >
-        <span>⌂</span>
-        <small>Home</small>
-      </a>
-
-      <a
-        href="#/individual"
-        data-nav="individual"
-      >
-        <span>≡</span>
-        <small>Rank</small>
-      </a>
-
-      <a
-        href="#/groups"
-        data-nav="groups"
-      >
-        <span>◈</span>
-        <small>Group</small>
-      </a>
-
-      <a
-        href="#/chapters"
-        data-nav="chapters"
-      >
-        <span>⌗</span>
-        <small>Chapter</small>
-      </a>
-
-      <a
-        href="#/more"
-        data-nav="more"
-      >
-        <span>•••</span>
-        <small>More</small>
-      </a>
-
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#/home" data-nav="home"><span>⌂</span><small>Home</small></a>
+      <a href="#/individual" data-nav="individual"><span>≡</span><small>Rank</small></a>
+      <a href="#/groups" data-nav="groups"><span>◈</span><small>Group</small></a>
+      <a href="#/chapters" data-nav="chapters"><span>⌗</span><small>Chapter</small></a>
+      <a href="afcl.html#/overview"><span>🏆</span><small>AFCL</small></a>
+      <a href="#/more" data-nav="more"><span>•••</span><small>More</small></a>
     </nav>
-
   </div>
 
-
-  <dialog
-    id="searchDialog"
-    class="search-dialog"
-  >
-
-    <form
-      method="dialog"
-      class="search-head"
-    >
-
-      <input
-        id="searchInput"
-        autocomplete="off"
-        placeholder="Search manager, team, name or chapter"
-      >
-
-      <button aria-label="Close">
-        ×
-      </button>
-
+  <dialog id="searchDialog" class="search-dialog">
+    <form method="dialog" class="search-head">
+      <input id="searchInput" autocomplete="off" placeholder="Search manager, team, name or chapter">
+      <button aria-label="Close">×</button>
     </form>
-
-    <div
-      id="searchResults"
-      class="search-results"
-    ></div>
-
+    <div id="searchResults" class="search-results"></div>
   </dialog>
 
-
-  <div
-    id="toast"
-    class="toast"
-    role="status"
-  ></div>
-
+  <div id="toast" class="toast" role="status"></div>
 
   <script src="assets/app.2359d74ca7.js"></script>
+  <script>
+(() => {
+'use strict';
+const state={manifest:null,data:null,config:null,seeding:[],seedMap:new Map(),ready:false,busy:false};
+const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const nfmt=n=>Number(n||0).toLocaleString('en-MY');
+function hashString(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+async function json(url){const r=await fetch(`${url}?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(url);return r.json()}
+async function load(){
+  try{
+    const m=await json('data/manifest.json');const d=await json(m.snapshot);state.manifest=m;state.config={qualification_gw:2,qualifiers:768,pot_size:192,tie_seed:'AFCL-2026-27-SEEDING-TIE-V1'};state.data=d;build();state.ready=true;enhance();
+  }catch(e){console.debug('AFCL profile integration unavailable',e)}
+}
+function build(){
+  const qgw=Number(state.config.qualification_gw||2),tieSeed=state.config.tie_seed||'AFCL-TIE-2026-27';
+  const rows=(state.data.individual||[]).map(base=>{const hs=(state.data.histories?.[base.id]||[]).map(Number),gw2=Number(hs[qgw-1]||0),total=hs.slice(0,qgw).reduce((s,x)=>s+x,0);return {...base,gw2,total,tie:hashString(`${tieSeed}|${base.id}`)}}).sort((a,b)=>b.gw2-a.gw2||b.total-a.total||a.tie-b.tie||String(a.team_name).localeCompare(String(b.team_name)));
+  rows.forEach((r,i)=>{r.seed=i+1;r.qualified=i<Number(state.config.qualifiers||768);r.pot=r.qualified?Math.floor(i/Number(state.config.pot_size||192))+1:null});state.seeding=rows;state.seedMap=new Map(rows.map(x=>[String(x.id),x]));
+}
+function enhance(){
+  if(!state.ready||state.busy)return;state.busy=true;
+  requestAnimationFrame(()=>{try{const parts=(location.hash||'').replace(/^#\/?/,'').split('/').filter(Boolean);if(parts[0]==='manager')addManagerCard(decodeURIComponent(parts[1]||''));if(parts[0]==='more')addRulesCard()}finally{state.busy=false}});
+}
+function addManagerCard(id){
+  const app=document.getElementById('app');if(!app||document.getElementById('afclManagerCard'))return;const r=state.seedMap.get(String(id));if(!r)return;
+  const provisional=String(state.manifest.status||'').toUpperCase()!=='FINAL';const el=document.createElement('section');el.className='section';el.id='afclManagerCard';
+  el.innerHTML=`<div class="section-head"><div><h2>ANSARA Fantasy Champions League</h2><span class="subline">${provisional?'Provisional GW2 qualification & seeding':'Official GW2 qualification & seeding'}</span></div><a href="afcl.html#/manager/${encodeURIComponent(r.id)}">Open AFCL</a></div><div class="profile-kpis" style="padding:0 14px 14px"><div><span>AFCL Status</span><strong style="font-size:14px;color:${r.qualified?'#15803d':'#b91c1c'}">${r.qualified?'Qualified':'Did Not Qualify'}</strong></div><div><span>GW2 Seed</span><strong>#${r.seed}</strong></div><div><span>GW2 Points</span><strong>${nfmt(r.gw2)}</strong></div><div><span>Pot</span><strong>${r.pot?`P${r.pot}`:'—'}</strong></div></div>${provisional?'<div class="notice" style="margin:0 14px 14px">AFCL position is provisional until FPL confirms GW2 scores. Seed, qualification status and pot may still change.</div>':''}`;
+  app.appendChild(el);
+}
+function addRulesCard(){
+  if(document.getElementById('afclRulesMoreCard'))return;const grid=document.querySelector('#app .more-grid'),app=document.getElementById('app');if(!app)return;const a=document.createElement('a');a.id='afclRulesMoreCard';a.href='afcl.html#/rules';a.className='more-card';a.innerHTML='<span>📘</span>Rules & FAQ';if(grid)grid.appendChild(a);else app.appendChild(a);
+}
+const observer=new MutationObserver(()=>enhance());observer.observe(document.getElementById('app'),{childList:true,subtree:true});window.addEventListener('hashchange',enhance);load();
+})();
 
+  </script>
   <script>
     (() => {
       let lastSeenBuildId = null;
       let lastSeenGw = null;
       let checking = false;
-
       async function checkDashboardUpdate() {
         if (checking || document.hidden) return;
         checking = true;
-
         try {
-          const response = await fetch(`data/manifest.json?v=${Date.now()}`, {
-            cache: "no-store"
-          });
+          const response = await fetch(`data/manifest.json?v=${Date.now()}`, { cache: "no-store" });
           if (!response.ok) return;
-
           const latest = await response.json();
           const latestGw = Number(latest.gw || 0);
-
           const selector = document.getElementById("gwSelect");
-          const availableGws = selector
-            ? Array.from(selector.options).map(option => Number(option.value || 0))
-            : [];
+          const availableGws = selector ? Array.from(selector.options).map(option => Number(option.value || 0)) : [];
           const loadedMaxGw = availableGws.length ? Math.max(...availableGws) : 0;
-
-          // A genuinely new gameweek has appeared. Reload so the app's normal
-          // initial-load logic automatically selects the newest GW.
-          if (loadedMaxGw && latestGw > loadedMaxGw) {
-            location.reload();
-            return;
-          }
-
-          // Same gameweek, newer engine build: refresh ranking data while
-          // preserving whichever GW (including an archive GW) the user selected.
-          if (
-            lastSeenBuildId &&
-            latest.build_id &&
-            latest.build_id !== lastSeenBuildId &&
-            latestGw === lastSeenGw
-          ) {
+          if (loadedMaxGw && latestGw > loadedMaxGw) { location.reload(); return; }
+          if (lastSeenBuildId && latest.build_id && latest.build_id !== lastSeenBuildId && latestGw === lastSeenGw) {
             document.getElementById("refreshBtn")?.click();
           }
-
           lastSeenBuildId = latest.build_id || lastSeenBuildId;
           lastSeenGw = latestGw || lastSeenGw;
         } catch (error) {
           console.debug("ANSARA FPL update check skipped:", error);
-        } finally {
-          checking = false;
-        }
+        } finally { checking = false; }
       }
-
-      // Establish the current build after the app has had time to initialise.
       setTimeout(checkDashboardUpdate, 5000);
-
-      // Tiny manifest-only check; this does not trigger GitHub Actions.
       setInterval(checkDashboardUpdate, 120000);
-
-      // Catch up immediately when a user returns to an old Safari/browser tab.
-      document.addEventListener("visibilitychange", () => {
-        if (!document.hidden) checkDashboardUpdate();
-      });
+      document.addEventListener("visibilitychange", () => { if (!document.hidden) checkDashboardUpdate(); });
       window.addEventListener("focus", checkDashboardUpdate);
     })();
   </script>
   <script type="module" src="assets/firebase-live.js?v=2"></script>
-
 </body>
 </html>
