@@ -422,6 +422,27 @@ function ensureApprovedPolish(){
   .draw-reveal h2{color:#fff!important;margin:8px auto 0!important}
   .draw-reveal p{color:#cbd1dc!important;margin:5px 0 0!important}
 
+  /* AFCL Qualification — same compact identity hierarchy as Groups. */
+  .afcl-qualification-list{padding:0!important;overflow:hidden!important}
+  .afcl-qual-list{display:block;background:#fff}
+  .afcl-qual-row{display:grid;grid-template-columns:48px minmax(0,1fr) 78px;gap:10px;align-items:center;min-height:86px;padding:11px 12px;border-bottom:1px solid #edf0f3;color:#172033;text-decoration:none;background:#fff}
+  .afcl-qual-row:last-child{border-bottom:0}
+  .afcl-qual-row.afcl-cut-in{border-bottom:2px solid #d5dae1}
+  .afcl-qual-seed{align-self:stretch;display:grid;place-items:center;border-right:1px solid #edf0f3;padding-right:9px;color:#667085;font-size:14px;font-weight:900;white-space:nowrap}
+  .afcl-qual-row.afcl-top-seed .afcl-qual-seed{color:var(--red)}
+  .afcl-qual-identity{min-width:0}
+  .afcl-qual-identity strong,.afcl-qual-identity span,.afcl-qual-identity small{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .afcl-qual-identity strong{color:#172033;font-size:13px;line-height:1.25;font-weight:850}
+  .afcl-qual-identity span{margin-top:3px;color:#475467;font-size:11.5px;line-height:1.25;font-weight:600}
+  .afcl-qual-identity small{margin-top:3px;color:#8a93a2;font-size:10px;line-height:1.25;font-weight:550}
+  .afcl-qual-metrics{text-align:right;white-space:nowrap}
+  .afcl-qual-score span{display:block;color:#8a93a2;font-size:8px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+  .afcl-qual-score strong{display:block;margin-top:1px;color:#172033;font-size:21px;line-height:1;font-weight:900}
+  .afcl-qual-total{display:flex;justify-content:flex-end;gap:4px;align-items:baseline;margin-top:5px;color:#667085;font-size:9px}
+  .afcl-qual-total b{color:#344054;font-size:10.5px}
+  .afcl-qual-pot,.afcl-qual-out{display:inline-flex;align-items:center;justify-content:center;min-width:31px;min-height:20px;margin-top:6px;padding:0 6px;border:1px solid #e1e5ea;border-radius:999px;background:#f5f6f7;color:#475467;font-size:8.5px;font-weight:850;letter-spacing:.03em}
+  .afcl-qual-out{background:#fff5f4;border-color:#f0d5d2;color:#9f2d28}
+  @media(min-width:720px){.afcl-qual-row{grid-template-columns:56px minmax(0,1fr) 92px;padding:12px 15px}.afcl-qual-identity strong{font-size:13.5px}.afcl-qual-score strong{font-size:22px}}
   .afcl-knockout-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px!important;margin-top:14px!important}.afcl-knockout-stats .kpi{border-color:#e1e5ea!important;box-shadow:none!important}
   /* AFCL Groups — mobile-first identity hierarchy */
   .afcl-group-roster-card,.afcl-fixtures-card{overflow:hidden!important}
@@ -468,7 +489,7 @@ function tabs(active){return `<nav class="afcl-tabs" aria-label="AFCL sections">
 function pageHead(title,sub=""){return `<div class="page-head"><div><h1>${esc(title)}</h1>${sub?`<p>${esc(sub)}</p>`:""}</div></div>`}
 function notice(){return isFinal()?'<div class="afcl-alert final"><strong>Qualification locked.</strong> Official GW2 scores now determine the Top 768, seeding and pots.</div>':'<div class="afcl-alert"><strong>Provisional qualification.</strong> Seeds and pots can still change until FPL finalises GW2.</div>'}
 function hero(){return `<section class="afcl-masthead"><div class="afcl-masthead-copy"><div class="afcl-kicker">AFCL · ${AFCL.season}</div><h1>ANSARA Fantasy Champions League</h1></div><div class="afcl-masthead-mark"><img class="afcl-logo" src="${AFCL_LOGO_DATA}" alt="ANSARA Fantasy Champions League ${AFCL.season}"></div></section>`}
-function seedTable(rows,cut=true){return `<div class="afcl-table-wrap"><table class="afcl-table afcl-seed-table"><caption class="sr-only">AFCL qualification and seeding</caption><thead><tr><th scope="col">#</th><th scope="col">Team / Manager</th><th scope="col">Chapter</th><th scope="col">GW2</th><th scope="col">Total</th><th scope="col">Pot</th></tr></thead><tbody>${rows.map(r=>{const cls=[r.seed<=5?"afcl-top-seed":"",cut&&r.seed===768?"afcl-cut-in":"",cut&&r.seed===769?"afcl-cut-out":""].filter(Boolean).join(" ");return `<tr class="${cls}"><td class="afcl-rank">${r.seed}</td><td><a class="afcl-team" href="#/manager/${enc(r.id)}">${esc(r.team_name)}</a><span class="afcl-sub">${esc(r.manager_name)}</span></td><td>${esc(r.chapter)}</td><td><strong>${nfmt(r.gw2)}</strong></td><td>${nfmt(r.total)}</td><td>${r.pot?`<span class="afcl-badge p${r.pot}">P${r.pot}</span>`:"—"}</td></tr>`}).join("")}</tbody></table></div>`}
+function seedTable(rows,cut=true){return `<div class="afcl-qual-list">${rows.map(r=>{const cls=[r.seed<=5?"afcl-top-seed":"",cut&&r.seed===768?"afcl-cut-in":"",cut&&r.seed===769?"afcl-cut-out":""].filter(Boolean).join(" "),badge=r.qualified?`<span class="afcl-qual-pot">P${r.pot}</span>`:`<span class="afcl-qual-out">OUT</span>`;return `<a class="afcl-qual-row ${cls}" href="#/manager/${enc(r.id)}"><div class="afcl-qual-seed">#${r.seed}</div><div class="afcl-qual-identity"><strong>${esc(r.team_name)}</strong><span>${esc(r.manager_name)}</span><small>${esc(r.chapter)}</small></div><div class="afcl-qual-metrics"><div class="afcl-qual-score"><span>GW2</span><strong>${nfmt(r.gw2)}</strong></div><div class="afcl-qual-total"><span>Total</span><b>${nfmt(r.total)}</b></div>${badge}</div></a>`}).join("")}</div>`}
 
 function knockoutStageState(gw=currentGw()){
   const stages=[{from:26,to:27,short:"R128",name:"Round of 128",teams:128},{from:28,to:29,short:"R64",name:"Round of 64",teams:64},{from:30,to:31,short:"R32",name:"Round of 32",teams:32},{from:32,to:33,short:"R16",name:"Round of 16",teams:16},{from:34,to:35,short:"QF",name:"Quarter Final",teams:8},{from:36,to:37,short:"SF",name:"Semi Final",teams:4},{from:38,to:38,short:"FINAL",name:"Grand Final",teams:2}];
