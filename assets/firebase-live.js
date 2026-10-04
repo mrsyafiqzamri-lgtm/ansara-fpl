@@ -16,28 +16,56 @@ const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const db = getDatabase(firebaseApp);
 
-/* --------------------------- Live audience --------------------------- */
+/* --------------------------- Visitor + sponsor ticker --------------------------- */
 function ensureAudienceBar(){
   let bar=document.getElementById("liveAudienceBar"); if(bar)return bar;
   const style=document.createElement("style"); style.textContent=`
     .live-audience-wrap{padding:0 24px;margin:2px auto 10px;max-width:1180px;box-sizing:border-box}
-    .live-audience-bar{min-height:42px;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;padding:9px 14px;border:1px solid #e2e6ed;border-radius:16px;background:rgba(255,255,255,.84);color:#667085;font-size:14px;line-height:1.25;text-align:center;box-sizing:border-box}
-    .live-audience-bar strong{color:#111827;font-weight:800}.live-audience-dot{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
-    .live-audience-separator{color:#b5bcc8;margin:0 1px}.live-audience-bar.is-error .live-audience-dot{background:#9ca3af;box-shadow:none}
-    @media(max-width:640px){.live-audience-wrap{padding:0 22px;margin-bottom:8px}.live-audience-bar{min-height:40px;border-radius:15px;font-size:13px}}
+    .live-audience-bar{min-height:42px;display:flex;align-items:center;overflow:hidden;padding:0;border:1px solid #e2e6ed;border-radius:16px;background:rgba(255,255,255,.84);color:#667085;font-size:14px;line-height:1.25;box-sizing:border-box}
+    .live-ticker{width:100%;overflow:hidden;white-space:nowrap}
+    .live-ticker-track{display:flex;width:max-content;will-change:transform;animation:liveTickerMove 28s linear infinite}
+    .live-ticker-group{display:flex;align-items:center;flex-shrink:0;gap:16px;padding:10px 16px 10px 0}
+    .live-ticker-item{display:inline-flex;align-items:center;gap:7px;flex-shrink:0}
+    .live-ticker-count{color:#111827;font-weight:800}
+    .live-ticker-dot{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+    .live-ticker-separator{color:#b5bcc8;font-weight:800;flex-shrink:0}
+    .live-ticker-ad{color:#27334a;font-weight:750;text-decoration:none;flex-shrink:0}
+    .live-ticker-ad:hover,.live-ticker-ad:focus-visible{text-decoration:underline}
+    .live-ticker:hover .live-ticker-track,.live-ticker:focus-within .live-ticker-track{animation-play-state:paused}
+    .live-audience-bar.is-error .live-ticker-dot{background:#9ca3af;box-shadow:none}
+    @keyframes liveTickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    @media(max-width:640px){.live-audience-wrap{padding:0 22px;margin-bottom:8px}.live-audience-bar{min-height:40px;border-radius:15px;font-size:13px}.live-ticker-group{gap:14px;padding:9px 14px 9px 0}.live-ticker-track{animation-duration:24s}}
+    @media(prefers-reduced-motion:reduce){.live-ticker-track{animation:none}.live-ticker{overflow-x:auto;scrollbar-width:none}.live-ticker::-webkit-scrollbar{display:none}}
   `; document.head.appendChild(style);
+
+  const tickerGroup=()=>`<div class="live-ticker-group">
+    <span class="live-ticker-item"><span class="live-ticker-dot" aria-hidden="true"></span><span><strong class="visitorsTodayCount">—</strong> visitors today</span></span>
+    <span class="live-ticker-separator" aria-hidden="true">•</span>
+    <a class="live-ticker-ad" href="https://www.fantaszyszentre.com" target="_blank" rel="noopener noreferrer">Make smarter FPL moves with fantaszyszentre.com</a>
+    <span class="live-ticker-separator" aria-hidden="true">•</span>
+    <span class="live-ticker-item"><span class="live-ticker-dot" aria-hidden="true"></span><span><strong class="visitorsTodayCount">—</strong> visitors today</span></span>
+    <span class="live-ticker-separator" aria-hidden="true">•</span>
+    <a class="live-ticker-ad" href="https://www.fantaszyszentre.com" target="_blank" rel="noopener noreferrer">Plan your FPL better with fantaszyszentre.com</a>
+    <span class="live-ticker-separator" aria-hidden="true">•</span>
+  </div>`;
+
   const wrap=document.createElement("div");wrap.className="live-audience-wrap";
-  bar=document.createElement("div");bar.id="liveAudienceBar";bar.className="live-audience-bar";bar.setAttribute("aria-live","polite");
-  bar.innerHTML='<span class="live-audience-dot" aria-hidden="true"></span><span><strong id="onlineNowCount">—</strong> online now</span><span class="live-audience-separator" aria-hidden="true">·</span><span><strong id="visitorsTodayCount">—</strong> visitors today</span>';
-  wrap.appendChild(bar); const controlbar=document.querySelector(".controlbar"); if(controlbar?.parentNode)controlbar.insertAdjacentElement("afterend",wrap); else (document.querySelector(".app-shell")||document.body).prepend(wrap); return bar;
+  bar=document.createElement("div");bar.id="liveAudienceBar";bar.className="live-audience-bar";
+  bar.innerHTML=`<div class="live-ticker" aria-label="Today's ANSARA FPL visitors and Fantaszy Szentre messages"><div class="live-ticker-track">${tickerGroup()}${tickerGroup()}</div></div>`;
+  wrap.appendChild(bar);
+  const controlbar=document.querySelector(".controlbar");
+  if(controlbar?.parentNode)controlbar.insertAdjacentElement("afterend",wrap);
+  else (document.querySelector(".app-shell")||document.body).prepend(wrap);
+  return bar;
 }
+
 const audienceBar=ensureAudienceBar();
-function audienceUnavailable(){audienceBar.classList.add("is-error");audienceBar.innerHTML='<span class="live-audience-dot" aria-hidden="true"></span><span>Live audience unavailable</span>'}
+function updateTodayVisitorCount(count){document.querySelectorAll(".visitorsTodayCount").forEach(e=>{e.textContent=String(count)})}
+function audienceUnavailable(){audienceBar.classList.add("is-error");updateTodayVisitorCount("—")}
 function malaysiaDateKey(){const p=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kuala_Lumpur",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),v={};for(const x of p)if(x.type!=="literal")v[x.type]=x.value;return `${v.year}-${v.month}-${v.day}`}
-function countOnlineUsers(v){if(!v||typeof v!=="object")return 0;return Object.values(v).reduce((n,c)=>n+(c&&typeof c==="object"&&Object.keys(c).length?1:0),0)}
 let stopTodayListener=null,activeDateKey=null,audienceStarted=false;
-function attachTodayVisitors(uid){const dateKey=malaysiaDateKey();if(dateKey===activeDateKey)return;if(typeof stopTodayListener==="function")stopTodayListener();activeDateKey=dateKey;set(ref(db,`visitors/${dateKey}/${uid}`),true).catch(console.error);stopTodayListener=onValue(ref(db,`visitors/${dateKey}`),s=>{const e=document.getElementById("visitorsTodayCount");if(e)e.textContent=String(s.size)},audienceUnavailable)}
-function startRealtimeAudience(user){if(audienceStarted)return;audienceStarted=true;const uid=user.uid;onValue(ref(db,".info/connected"),async s=>{if(s.val()!==true)return;const c=push(ref(db,`presence/${uid}`));try{await onDisconnect(c).remove();await set(c,true)}catch(e){console.error(e)}},audienceUnavailable);onValue(ref(db,"presence"),s=>{const e=document.getElementById("onlineNowCount");if(e)e.textContent=String(countOnlineUsers(s.val()))},audienceUnavailable);attachTodayVisitors(uid);setInterval(()=>attachTodayVisitors(uid),60000)}
+function attachTodayVisitors(uid){const dateKey=malaysiaDateKey();if(dateKey===activeDateKey)return;if(typeof stopTodayListener==="function")stopTodayListener();activeDateKey=dateKey;set(ref(db,`visitors/${dateKey}/${uid}`),true).catch(console.error);stopTodayListener=onValue(ref(db,`visitors/${dateKey}`),s=>updateTodayVisitorCount(s.size),audienceUnavailable)}
+function startRealtimeAudience(user){if(audienceStarted)return;audienceStarted=true;attachTodayVisitors(user.uid);setInterval(()=>attachTodayVisitors(user.uid),60000)}
 
 /* --------------------------- AFCL integrated app --------------------------- */
 const AFCL={competition:"ANSARA Fantasy Champions League",short:"AFCL",season:"2026/27",qualificationGw:2,qualifiers:768,eliminated:35,pots:4,potSize:192,groups:32,teamsPerGroup:24,qualifyPerGroup:4,groupStartGw:3,groupEndGw:25,drawSeed:"AFCL-2026-27-OFFICIAL-DRAW-V1",tieSeed:"AFCL-2026-27-SEEDING-TIE-V1",rulesVersion:"1.0"};
